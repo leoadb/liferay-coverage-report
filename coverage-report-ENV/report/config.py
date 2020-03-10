@@ -1,4 +1,4 @@
-INTEGRATION_TEST_ENABLED=False
+INTEGRATION_TEST_ENABLED=True
 UNIT_TEST_ENABLED=True
 LIFERAY_BUNDLES=['data-engine-rest-impl','data-engine-rest-api','data-engine-service','data-engine-api']
 LIFERAY_HOME='/Users/mateus/Documents/Projects/liferay-portal'
