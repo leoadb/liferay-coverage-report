@@ -1,0 +1,6 @@
+/.vscode
+**/.gitattributes
+**/bin
+**/lib
+**/pyvenv.cfg
+**/__pycache__
