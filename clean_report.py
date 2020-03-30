@@ -1,15 +1,16 @@
 import config
 from bs4 import BeautifulSoup
 import pandas as pd
+import os
 
 #Function wich cleans the html.index, to show only the relevant packages tests results
-def report_clean():
+def report_clean(base_path):
     #output file
     new_table = BeautifulSoup('<tbody></tbody>', 'html.parser')
 
     #opening and reading the 'index.html'
-    with open(config.LIFERAY_REPORT_HTML) as index:
-            index_html = index.read()
+    with open(os.path.join(base_path, 'jacoco','html-report','index.html')) as index:
+        index_html = index.read()
 
     #parsing index.html to BeautifulSoup Object
     index_html_code = BeautifulSoup(index_html, 'html.parser')
@@ -29,18 +30,18 @@ def report_clean():
     index_html_code = str(index_html_code)
 
     #opening to write the new report
-    with open(config.LIFERAY_NEW_REPORT_HTML, 'w') as new_html:
+    with open(os.path.join(base_path, 'jacoco','html-report','report.html'), 'w') as new_html:
         new_html.write(index_html_code)
 
 
 #Function wich sum the real values of the columns
-def report_sum():
+def report_sum(base_path):
     #some initial variables
     dataframe = pd.DataFrame()
     new_table_foot = BeautifulSoup('<tfoot><tr></tr></tfoot>', 'html.parser')
 
     #opening and reading the 'report.html'
-    with open(config.LIFERAY_NEW_REPORT_HTML) as index:
+    with open(os.path.join(base_path, 'jacoco','html-report','report.html')) as index:
         index_html = index.read()
 
     #parsing report.html to DataFrame Object
@@ -76,12 +77,12 @@ def report_sum():
     index_html_code = str(index_html_code)
 
     #opening to write the new report
-    with open(config.LIFERAY_NEW_REPORT_HTML, 'w') as new_html:
+    with open(os.path.join(base_path, 'jacoco','html-report','report.html'), 'w') as new_html:
         new_html.write(index_html_code)
 
 
 #Function wich calculates the percentage of the test coverage
-def report_percentages():
+def report_percentages(base_path):
     #access directories com.liferay.data.engine.../index.html and catch the tables' numbers
     sum_instructions = 0
     sum_missed_instructions = 0
@@ -92,8 +93,8 @@ def report_percentages():
     dir_dataframe = pd.DataFrame()
 
     #opening and reading the 'index.html'
-    with open(config.LIFERAY_NEW_REPORT_HTML) as index:
-            index_html = index.read()
+    with open(os.path.join(base_path, 'jacoco','html-report','report.html')) as index:
+        index_html = index.read()
 
     #parsing index.html to BeautifulSoup Object
     index_html_code = BeautifulSoup(index_html, 'html.parser')
@@ -110,7 +111,7 @@ def report_percentages():
             req_directories.append(link.get('href'))
 
     for dic in req_directories:
-        dir_path = config.LIFERAY_PACKAGES_DIRECTORIES.format(str(dic))
+        dir_path = os.path.join(base_path, 'jacoco','html-report', str(dic))
     
         with open(dir_path) as dir_index:
             dir_index_html = dir_index.read()
@@ -148,5 +149,5 @@ def report_percentages():
     index_html_code.table.tfoot.tr.replace_with(html_table_foot.tr)
     index_html_code = str(index_html_code)
 
-    with open(config.LIFERAY_NEW_REPORT_HTML, 'w') as new_html:
+    with open(os.path.join(base_path, 'jacoco','html-report','report.html'), 'w') as new_html:
         new_html.write(index_html_code)
